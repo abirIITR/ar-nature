@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AR Test — Scene Viewer</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, Roboto, sans-serif;
+    background: #111;
+    color: #eee;
+    text-align: center;
+    padding: 20px;
+  }
+  h2 { margin-bottom: 4px; }
+  p.sub { color: #999; margin-top: 0; font-size: 14px; }
+  model-viewer {
+    width: 100%;
+    height: 420px;
+    background: #1a1a1a;
+    border-radius: 12px;
+  }
+  a.button {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 12px 24px;
+    background: #4285F4;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+  }
+  .note {
+    font-size: 13px;
+    color: #888;
+    margin-top: 20px;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+</head>
+<body>
+
+<h2>AR Object Test</h2>
+<p class="sub">Replace "yourusername/ar-nature" below with your actual GitHub Pages repo path</p>
+
+<model-viewer
+  src="https://yourusername.github.io/ar-nature/model.glb"
+  ios-src="https://yourusername.github.io/ar-nature/model.usdz"
+  ar
+  ar-modes="scene-viewer webxr quick-look"
+  camera-controls
+  auto-rotate
+  shadow-intensity="1"
+  alt="A 3D nature model">
+</model-viewer>
+
+<p>
+  On Android: tap the AR icon (bottom right of the viewer above) — that launches <b>Scene Viewer</b> directly.<br>
+  On iOS: tap the AR icon — that launches <b>AR Quick Look</b> using the .usdz file.<br>
+  Or use the raw direct link below (bypasses model-viewer entirely, Android only):
+</p>
+
+<a class="button" href="intent://arvr.google.com/scene-viewer/1.0?file=https://yourusername.github.io/ar-nature/model.glb&mode=ar_preferred#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://yourusername.github.io/ar-nature/;end;">
+  Open in Scene Viewer (Android)
+</a>
+
+<p class="note">
+  Note: this needs to be opened on an actual phone (Android with ARCore, or iOS 12+) for AR to launch — desktop only shows a 3D preview. Update the four URLs above (2 in model-viewer, 1 in the intent link, 1 in browser_fallback_url) once your repo is live on GitHub Pages.
+</p>
+
+</body>
+</html>
