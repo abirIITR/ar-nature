@@ -45,11 +45,11 @@
 <body>
 
 <h2>AR Object Test</h2>
-<p class="sub">Replace "abirIITR/ar-nature" below with your actual GitHub Pages repo path</p>
+<p class="sub">Replace "yourusername/ar-nature" below with your actual GitHub Pages repo path</p>
 
 <model-viewer
-  src="https://abirIITR.github.io/ar-nature/model.glb"
-  ios-src="https://abirIITR.github.io/ar-nature/model.usdz"
+  src="https://yourusername.github.io/ar-nature/model.gltf"
+  ios-src="https://yourusername.github.io/ar-nature/model.usdz"
   ar
   ar-modes="scene-viewer webxr quick-look"
   camera-controls
@@ -64,12 +64,20 @@
   Or use the raw direct link below (bypasses model-viewer entirely, Android only):
 </p>
 
-<a class="button" href="intent://arvr.google.com/scene-viewer/1.0?file=https://abirIITR.github.io/ar-nature/model.glb&mode=ar_preferred#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://abirIITR.github.io/ar-nature/;end;">
+<a class="button" href="intent://arvr.google.com/scene-viewer/1.0?file=https://yourusername.github.io/ar-nature/model.gltf&mode=ar_preferred#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://yourusername.github.io/ar-nature/;end;">
   Open in Scene Viewer (Android)
 </a>
 
+<p class="note" style="margin-top:12px;">
+  <b>Using glTF Separate export?</b> Blender's "glTF Separate (.gltf + .bin + textures)" format produces
+  <code>model.gltf</code>, <code>model.bin</code>, and one or more image files (e.g. <code>texture_0.jpg</code>).
+  All of these must be uploaded to the <b>same folder</b> in your repo — the .gltf file references the .bin
+  and textures by relative path, so if any of them are missing or in a different folder, the model will fail
+  to load (usually a silent blank viewer, or a console 404 for the .bin/texture file).
+</p>
+
 <p class="note">
-  Note: this needs to be opened on an actual phone (Android with ARCore, or iOS 12+) for AR to launch — desktop only shows a 3D preview. Update the four URLs above (2 in model-viewer, 1 in the intent link, 1 in browser_fallback_url) once your repo is live on GitHub Pages.
+  Note: this needs to be opened on an actual phone (Android with ARCore, or iOS 12+) for AR to launch — desktop only shows a 3D preview. Update the four URLs above (2 in model-viewer, 1 in the intent link, 1 in browser_fallback_url) once your repo is live on GitHub Pages, and make sure model.gltf, model.bin, and all texture image files are uploaded together in the same folder.
 </p>
 
 </body>
