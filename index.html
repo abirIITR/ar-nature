@@ -78,7 +78,6 @@
 <body>
 
 <h2>AR Object Test</h2>
-<p class="sub">Replace "abirIITR/ar-nature" below with your actual GitHub Pages repo path</p>
 
 <model-viewer
   src="https://abirIITR.github.io/ar-nature/model.glb"
@@ -91,27 +90,15 @@
   alt="A 3D nature model">
 </model-viewer>
 
-<p>
-  On Android: tap the AR icon (bottom right of the viewer above) — that launches <b>Scene Viewer</b> directly.<br>
-  On iOS: tap the AR icon — that launches <b>AR Quick Look</b> using the .usdz file.<br>
-  Or use the raw direct link below (bypasses model-viewer entirely, Android only):
-</p>
 
 <a class="button" href="intent://arvr.google.com/scene-viewer/1.0?file=https://abirIITR.github.io/ar-nature/model.glb&mode=ar_preferred#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://abirIITR.github.io/ar-nature/;end;">
   Open in Scene Viewer (Android)
 </a>
 
-<p class="note" style="margin-top:12px;">
-  <b>Using glTF Binary (.glb) export?</b> This bundles the mesh, buffer data, and textures into a single
-  self-contained file — just upload <code>model.glb</code> on its own, no separate .bin or texture files needed.
-</p>
 
-<p class="note">
-  Note: this needs to be opened on an actual phone (Android with ARCore, or iOS 12+) for AR to launch — desktop only shows a 3D preview. Update the four URLs above (2 in model-viewer, 1 in the intent link, 1 in browser_fallback_url) once your repo is live on GitHub Pages.
-</p>
+
 
 <h2 style="margin-top:40px;">Photo Slideshow</h2>
-<p class="sub">Images named "b (1)" … "b (N)" from your GitHub Pages repo</p>
 
 <div class="slideshow">
   <img id="slide-img" src="" alt="Slideshow image">
@@ -127,7 +114,7 @@
   // ---- Slideshow config: adjust these to match your repo ----
   const IMAGE_BASE = 'https://abirIITR.github.io/ar-nature/';
   const IMAGE_COUNT = 10;          // how many "b (N)" images you have
-  const IMAGE_EXT = 'png';         // file extension used in the repo
+  const IMAGE_EXT = 'JPG';         // file extension used in the repo
   const AUTO_INTERVAL_MS = 3000;   // time between slides when auto-playing
   // -------------------------------------------------------------
 
