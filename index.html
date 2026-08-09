@@ -54,6 +54,7 @@
     height: 320px;
     object-fit: contain;
     background: #000;
+    transition: opacity 0.15s ease;
   }
   .slideshow .controls {
     display: flex;
@@ -72,7 +73,13 @@
     font-size: 14px;
   }
   .slideshow button:hover { background: #444; }
-  .slideshow .counter { font-size: 13px; color: #999; min-width: 50px; }
+  .slideshow button:disabled { opacity: 0.5; cursor: default; }
+  .slideshow .counter { font-size: 13px; color: #999; min-width: 70px; }
+  .slideshow .preload-status {
+    font-size: 12px;
+    color: #777;
+    padding: 6px 0 0;
+  }
 </style>
 </head>
 <body>
@@ -103,11 +110,12 @@
 <div class="slideshow">
   <img id="slide-img" src="" alt="Slideshow image">
   <div class="controls">
-    <button id="prev-btn">‹ Prev</button>
-    <span class="counter" id="slide-counter"></span>
-    <button id="next-btn">Next ›</button>
-    <button id="play-btn">▶ Auto</button>
+    <button id="prev-btn" disabled>‹ Prev</button>
+    <span class="counter" id="slide-counter">Loading…</span>
+    <button id="next-btn" disabled>Next ›</button>
+    <button id="play-btn" disabled>▶ Auto</button>
   </div>
+  <div class="preload-status" id="preload-status"></div>
 </div>
 
 <script>
@@ -118,23 +126,26 @@
   const AUTO_INTERVAL_MS = 3000;   // time between slides when auto-playing
   // -------------------------------------------------------------
 
-  const images = Array.from({ length: IMAGE_COUNT }, (_, i) =>
+  const imageSrcs = Array.from({ length: IMAGE_COUNT }, (_, i) =>
     `${IMAGE_BASE}b (${String(i + 1).padStart(2, '0')}).${IMAGE_EXT}`
   );
 
   let current = 0;
   let autoTimer = null;
+  let loadedCount = 0;
+  const preloadedImages = new Array(imageSrcs.length);
 
   const imgEl = document.getElementById('slide-img');
   const counterEl = document.getElementById('slide-counter');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
   const playBtn = document.getElementById('play-btn');
+  const statusEl = document.getElementById('preload-status');
 
   function showSlide(index) {
-    current = (index + images.length) % images.length;
-    imgEl.src = images[current];
-    counterEl.textContent = `${current + 1} / ${images.length}`;
+    current = (index + imageSrcs.length) % imageSrcs.length;
+    imgEl.src = imageSrcs[current];
+    counterEl.textContent = `${current + 1} / ${imageSrcs.length}`;
   }
 
   function stopAuto() {
@@ -157,7 +168,29 @@
     }
   });
 
-  showSlide(0);
+  // Preload all images into the browser cache before enabling the controls.
+  // The first image is shown as soon as IT loads, so the user isn't stuck
+  // staring at a blank box while the rest load in the background.
+  imageSrcs.forEach((src, i) => {
+    const img = new Image();
+    img.onload = img.onerror = () => {
+      loadedCount++;
+      statusEl.textContent = `Preloading images… ${loadedCount}/${imageSrcs.length}`;
+
+      if (i === 0) {
+        showSlide(0);
+      }
+
+      if (loadedCount === imageSrcs.length) {
+        statusEl.textContent = '';
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+        playBtn.disabled = false;
+      }
+    };
+    img.src = src;
+    preloadedImages[i] = img;
+  });
 </script>
 
 </body>
