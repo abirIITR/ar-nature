@@ -40,11 +40,45 @@
     margin-left: auto;
     margin-right: auto;
   }
+  .slideshow {
+    position: relative;
+    max-width: 480px;
+    margin: 30px auto 0;
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .slideshow img {
+    display: block;
+    width: 100%;
+    height: 320px;
+    object-fit: contain;
+    background: #000;
+  }
+  .slideshow .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 10px 0;
+  }
+  .slideshow button {
+    background: #333;
+    color: #eee;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .slideshow button:hover { background: #444; }
+  .slideshow .counter { font-size: 13px; color: #999; min-width: 50px; }
 </style>
 </head>
 <body>
 
 <h2>AR Object Test</h2>
+<p class="sub">Replace "abirIITR/ar-nature" below with your actual GitHub Pages repo path</p>
 
 <model-viewer
   src="https://abirIITR.github.io/ar-nature/model.glb"
@@ -57,13 +91,87 @@
   alt="A 3D nature model">
 </model-viewer>
 
+<p>
+  On Android: tap the AR icon (bottom right of the viewer above) — that launches <b>Scene Viewer</b> directly.<br>
+  On iOS: tap the AR icon — that launches <b>AR Quick Look</b> using the .usdz file.<br>
+  Or use the raw direct link below (bypasses model-viewer entirely, Android only):
+</p>
 
 <a class="button" href="intent://arvr.google.com/scene-viewer/1.0?file=https://abirIITR.github.io/ar-nature/model.glb&mode=ar_preferred#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://abirIITR.github.io/ar-nature/;end;">
   Open in Scene Viewer (Android)
 </a>
 
+<p class="note" style="margin-top:12px;">
+  <b>Using glTF Binary (.glb) export?</b> This bundles the mesh, buffer data, and textures into a single
+  self-contained file — just upload <code>model.glb</code> on its own, no separate .bin or texture files needed.
+</p>
 
+<p class="note">
+  Note: this needs to be opened on an actual phone (Android with ARCore, or iOS 12+) for AR to launch — desktop only shows a 3D preview. Update the four URLs above (2 in model-viewer, 1 in the intent link, 1 in browser_fallback_url) once your repo is live on GitHub Pages.
+</p>
 
+<h2 style="margin-top:40px;">Photo Slideshow</h2>
+<p class="sub">Images named "b (1)" … "b (N)" from your GitHub Pages repo</p>
+
+<div class="slideshow">
+  <img id="slide-img" src="" alt="Slideshow image">
+  <div class="controls">
+    <button id="prev-btn">‹ Prev</button>
+    <span class="counter" id="slide-counter"></span>
+    <button id="next-btn">Next ›</button>
+    <button id="play-btn">▶ Auto</button>
+  </div>
+</div>
+
+<script>
+  // ---- Slideshow config: adjust these to match your repo ----
+  const IMAGE_BASE = 'https://abirIITR.github.io/ar-nature/';
+  const IMAGE_COUNT = 10;          // how many "b (N)" images you have
+  const IMAGE_EXT = 'jpg';         // file extension used in the repo
+  const AUTO_INTERVAL_MS = 3000;   // time between slides when auto-playing
+  // -------------------------------------------------------------
+
+  const images = Array.from({ length: IMAGE_COUNT }, (_, i) =>
+    `${IMAGE_BASE}b (${String(i + 1).padStart(2, '0')}).${IMAGE_EXT}`
+  );
+
+  let current = 0;
+  let autoTimer = null;
+
+  const imgEl = document.getElementById('slide-img');
+  const counterEl = document.getElementById('slide-counter');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const playBtn = document.getElementById('play-btn');
+
+  function showSlide(index) {
+    current = (index + images.length) % images.length;
+    imgEl.src = images[current];
+    counterEl.textContent = `${current + 1} / ${images.length}`;
+  }
+
+  function stopAuto() {
+    if (autoTimer) {
+      clearInterval(autoTimer);
+      autoTimer = null;
+      playBtn.textContent = '▶ Auto';
+    }
+  }
+
+  prevBtn.addEventListener('click', () => { stopAuto(); showSlide(current - 1); });
+  nextBtn.addEventListener('click', () => { stopAuto(); showSlide(current + 1); });
+
+  playBtn.addEventListener('click', () => {
+    if (autoTimer) {
+      stopAuto();
+    } else {
+      playBtn.textContent = '⏸ Stop';
+      autoTimer = setInterval(() => showSlide(current + 1), AUTO_INTERVAL_MS);
+    }
+  });
+
+  showSlide(0);
+</script>
 
 </body>
 </html>
