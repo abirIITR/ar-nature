@@ -22,11 +22,31 @@
     background: #1a1a1a;
     border-radius: 12px;
   }
+  .model-wrap {
+    position: relative;
+  }
+  .model-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    color: #ccc;
+    font-size: 15px;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
   a.button {
     display: inline-block;
     margin-top: 16px;
     padding: 12px 24px;
-    background: #4285F4;
+    background: #227836;
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -43,7 +63,7 @@
   .slideshow {
     position: relative;
     max-width: 480px;
-    margin: 30px auto 0;
+    margin: 10px auto 0;
     background: #1a1a1a;
     border-radius: 12px;
     overflow: hidden;
@@ -51,8 +71,8 @@
   .slideshow img {
     display: block;
     width: 100%;
-    height: 320px;
-    object-fit: contain;
+    height: 280px;
+    object-fit: cover;
     background: #000;
     transition: opacity 0.15s ease;
   }
@@ -86,16 +106,19 @@
 
 <h2>AR Object Test</h2>
 
-<model-viewer
-  src="https://abirIITR.github.io/ar-nature/model.glb"
-  ios-src="https://abirIITR.github.io/ar-nature/model.usdz"
-  ar
-  ar-modes="scene-viewer webxr quick-look"
-  camera-controls
-  auto-rotate
-  shadow-intensity="1"
-  alt="A 3D nature model">
-</model-viewer>
+<div class="model-wrap">
+  <model-viewer
+    src="https://abirIITR.github.io/ar-nature/model.glb"
+    ios-src="https://abirIITR.github.io/ar-nature/model.usdz"
+    ar
+    ar-modes="scene-viewer webxr quick-look"
+    camera-controls
+    auto-rotate
+    shadow-intensity="1"
+    alt="A 3D nature model">
+  </model-viewer>
+  <div class="model-loading" id="model-loading">Loading model...</div>
+</div>
 
 
 <a class="button" href="intent://arvr.google.com/scene-viewer/1.0?file=https://abirIITR.github.io/ar-nature/model.glb&mode=ar_preferred#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=https://abirIITR.github.io/ar-nature/;end;">
@@ -117,6 +140,21 @@
   </div>
   <div class="preload-status" id="preload-status"></div>
 </div>
+
+<script>
+  // Hide the "Loading model..." overlay once the .glb has finished loading.
+  const modelViewerEl = document.querySelector('model-viewer');
+  const modelLoadingEl = document.getElementById('model-loading');
+  if (modelViewerEl && modelLoadingEl) {
+    modelViewerEl.addEventListener('load', () => {
+      modelLoadingEl.style.opacity = '0';
+      setTimeout(() => { modelLoadingEl.style.display = 'none'; }, 200);
+    });
+    modelViewerEl.addEventListener('error', () => {
+      modelLoadingEl.textContent = 'Failed to load model';
+    });
+  }
+</script>
 
 <script>
   // ---- Slideshow config: adjust these to match your repo ----
